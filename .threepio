@@ -1,0 +1,5 @@
+rules:
+  allFilesTested:
+    exclude:
+      - src/types.ts
+      - src/test-helpers/index.ts

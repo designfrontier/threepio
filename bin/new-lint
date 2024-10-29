@@ -1,0 +1,145 @@
+#!/usr/bin/env node
+
+const fs = require('fs')
+const prompts = require('prompts')
+const changeCase = require('case-anything')
+
+const questions = [
+  {
+    type: 'text',
+    name: 'name',
+    message: 'What is the name of the lint?',
+  },
+  {
+    type: 'text',
+    name: 'desc',
+    message: 'Write a short description of what it checks',
+  },
+  {
+    type: 'select',
+    name: 'level',
+    message: 'What level should it default to?',
+    choices: [
+      { title: 'Error', value: 'error' },
+      { title: 'Warning', value: 'warn' },
+    ],
+    initial: 0,
+  },
+]
+
+const insertLineInFile = (filename, marker, lineToInsert) => {
+  const readFile = fs.readFileSync(filename, 'utf-8')
+  const fileArr = readFile.split('\n')
+  const fileLineIndex = fileArr.findIndex((line) => line.includes(marker))
+  fs.writeFileSync(
+    filename,
+    [
+      ...fileArr.slice(0, fileLineIndex),
+      lineToInsert,
+      ...fileArr.slice(fileLineIndex),
+    ].join('\n')
+  )
+}
+
+;(async () => {
+  const { name, level, desc } = await prompts(questions)
+  const filename = changeCase.kebabCase(name)
+  const varName = changeCase.camelCase(name)
+
+  const jsTemplate = `import { LintError, LintErrorType, Context, File } from '../types'
+
+export async function test(context: Context, level: LintErrorType): Promise<LintError> {
+  const shouldReport = true;
+
+  return shouldReport
+    ? {
+        type: level,
+        message: \`[${name}](https://github.com/designfrontier/threepio/blob/main/docs/rules.md#${filename})\`,
+      }
+    : { type: 'none', message: '' }
+}
+  `
+  const testTemplate = `import { test as ${varName} } from './${filename}'
+import { generateStubContext, generateStubPullRequest } from '../test-helpers'
+
+describe('#${varName}', () => {
+  test('returns an error', async () => {
+    const fakeContext = generateStubContext({
+      pull_request: generateStubPullRequest({
+        body: 'this is a test string with no JIRA id in it',
+      }),
+    })
+
+    const { type, message } = await ${varName}(fakeContext, 'error')
+
+    expect(type).toBe('error')
+    expect(message).toBe(
+      '[${name}](https://github.com/designfrontier/threepio/blob/main/docs/rules.md#${filename})'
+    )
+  })
+})
+  `
+  const docTemplate = `### ${name}
+
+id: \`${varName}\`
+default level: \`${level}\`
+
+${desc}`
+
+  // stub lint and test files
+  fs.writeFileSync(`src/lints/${filename}.ts`, jsTemplate)
+  fs.writeFileSync(`src/lints/${filename}.test.ts`, testTemplate)
+
+  // docs
+  const rules = fs.readFileSync('docs/rules.md', 'utf-8')
+  fs.writeFileSync(
+    'docs/rules.md',
+    `${rules}
+
+  ${docTemplate}`
+  )
+
+  // add to the index file
+  const indexFile = fs.readFileSync('src/lints/index.ts', 'utf-8')
+  const fileArr = indexFile.split('\n')
+
+  const lastImport = fileArr.findLastIndex((line) => line.startsWith('import'))
+  const importAdded = [
+    ...fileArr.slice(0, lastImport),
+    `import { test as ${varName} } from './${filename}'`,
+    ...fileArr.slice(lastImport),
+  ]
+  const lintLine = importAdded.findIndex((l) => l.includes('checkMigrations,'))
+  importAdded.splice(lintLine, 0, `  ${varName},`)
+
+  fs.writeFileSync('src/lints/index.ts', importAdded.join('\n'))
+
+  // add to config file
+  insertLineInFile(
+    'src/config.ts',
+    'changeSizeCheck',
+    `      ${varName}: '${level}',`
+  )
+
+  // add to config test file
+  insertLineInFile(
+    'src/config.test.ts',
+    'changeSizeCheck',
+    `  ${varName}: '${level}',`
+  )
+
+  // add to readme file
+  insertLineInFile('README.md', 'changeSizeCheck', `  ${varName}: ${level}`)
+
+  console.log(`New Lint created!
+
+  You will need to update a few test files as you write
+  the actual lint based on the stubs. You can find the
+  stubs here:
+  - src/lints/${filename}.ts
+  - src/lints/${filename}.test.ts
+
+  Documentation place holders have been added to:
+  - docs/rules.md
+  - README.md`)
+})()
