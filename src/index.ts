@@ -10,7 +10,7 @@ import { config } from './config'
 
 export function shouldMessage(
   lints: { error: Array<LintError>; warning: Array<LintError> },
-  action: string
+  action: string,
 ) {
   return action === 'opened' || lints.error.length + lints.warning.length > 0
 }

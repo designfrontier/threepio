@@ -9,31 +9,31 @@ import { generateStubContext } from './test-helpers'
 describe('#createMessage', () => {
   test('should return usage message if unknown event', () => {
     expect(createMessage('unhandled', generateStubContext())).toBe(
-      `You tried to use an event Threepio doesn't understand yet`
+      `You tried to use an event Threepio doesn't understand yet`,
     )
   })
 
   test('should return blank message if push event', () => {
     expect(createMessage('push', generateStubContext())).toMatch(
-      `Reminders of how to do a good code review`
+      `Reminders of how to do a good code review`,
     )
   })
 
   test('should return blank message if synchronize event', () => {
     expect(createMessage('synchronize', generateStubContext())).toMatch(
-      `Reminders of how to do a good code review`
+      `Reminders of how to do a good code review`,
     )
   })
 
   test('should return blank message if edited event', () => {
     expect(createMessage('edited', generateStubContext())).toMatch(
-      `Reminders of how to do a good code review`
+      `Reminders of how to do a good code review`,
     )
   })
 
   test('should return opened message if opened event', () => {
     expect(createMessage('opened', generateStubContext())).toMatch(
-      `Reminders of how to do a good code review`
+      `Reminders of how to do a good code review`,
     )
   })
 })
@@ -62,7 +62,7 @@ describe('#looksGood', () => {
 describe('#createWarningMessage', () => {
   test('should return correctly formatted message', () => {
     expect(
-      createWarningMessage([{ type: 'warning', message: 'this is a warning' }])
+      createWarningMessage([{ type: 'warning', message: 'this is a warning' }]),
     ).toBe(`#### Things That Need Reviewer Attention
 
 - this is a warning`)

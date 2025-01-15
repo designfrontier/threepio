@@ -10,8 +10,8 @@ describe('#shouldMessage', () => {
     expect(
       shouldMessage(
         { error: [{ type: 'error', message: 'an error' }], warning: [] },
-        'updated'
-      )
+        'updated',
+      ),
     ).toBe(true)
   })
 
@@ -19,8 +19,8 @@ describe('#shouldMessage', () => {
     expect(
       shouldMessage(
         { error: [], warning: [{ type: 'warning', message: 'a warning' }] },
-        'updated'
-      )
+        'updated',
+      ),
     ).toBe(true)
   })
 
@@ -31,8 +31,8 @@ describe('#shouldMessage', () => {
           error: [{ type: 'error', message: 'an error' }],
           warning: [{ type: 'warning', message: 'a warning' }],
         },
-        'updated'
-      )
+        'updated',
+      ),
     ).toBe(true)
   })
 })
@@ -44,7 +44,7 @@ describe('#review', () => {
         listFiles: jest.fn(async () => {
           return {
             data: ['test.js', 'index.ts', 'index.test.ts'].map((f) =>
-              generateFile({ filename: f })
+              generateFile({ filename: f }),
             ),
           }
         }),
@@ -75,8 +75,8 @@ describe('#review', () => {
         },
         {
           rest: restStub,
-        }
-      )
+        },
+      ),
     ).toBe(true)
 
     expect(restStub.pulls.listFiles).toHaveBeenCalledTimes(1)
@@ -88,7 +88,7 @@ describe('#review', () => {
         listFiles: jest.fn(async () => {
           return {
             data: ['test.js', 'index.ts', 'index.test.ts'].map((f) =>
-              generateFile({ filename: f })
+              generateFile({ filename: f }),
             ),
           }
         }),
@@ -119,8 +119,8 @@ describe('#review', () => {
         },
         {
           rest: restStub,
-        }
-      )
+        },
+      ),
     ).toBe(true)
 
     expect(restStub.issues.listComments).toHaveBeenCalledTimes(1)
@@ -134,7 +134,7 @@ describe('#review', () => {
         listFiles: jest.fn(async () => {
           return {
             data: ['test.js', 'index.ts', 'index.test.ts'].map((f) =>
-              generateFile({ filename: f })
+              generateFile({ filename: f }),
             ),
           }
         }),
@@ -165,8 +165,8 @@ describe('#review', () => {
         },
         {
           rest: restStub,
-        }
-      )
+        },
+      ),
     ).toBe(true)
 
     expect(restStub.issues.listComments).toHaveBeenCalledTimes(1)
@@ -182,10 +182,10 @@ describe('#parse', () => {
     expect(
       await parse({
         files: ['test.js', 'test.test.js', 'index.ts', 'index.test.ts'].map(
-          (f) => generateFile({ filename: f })
+          (f) => generateFile({ filename: f }),
         ),
         ...context.payload,
-      })
+      }),
     ).toStrictEqual({
       errors: [],
       failed: false,

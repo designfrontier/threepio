@@ -32,7 +32,7 @@ describe('#allFilesTested', () => {
   test('returns no warning if all files covered', async () => {
     const fakeContext = generateStubContext({
       files: ['test.js', 'test.test.js', 'index.ts', 'index.test.ts'].map((f) =>
-        generateFile({ filename: f })
+        generateFile({ filename: f }),
       ),
     })
     const { type } = await allFilesTested(fakeContext, 'warning', {})

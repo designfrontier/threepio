@@ -19,7 +19,7 @@ const EXCLUDE_SUB_EXTENSIONS = ['d', 'config']
 export async function test(
   context: Context,
   level: LintErrorType,
-  config: RuleConfig
+  config: RuleConfig,
 ): Promise<LintError> {
   const { files = [] } = context
 
@@ -39,7 +39,7 @@ export async function test(
 
       return a
     },
-    { testFiles: [], files: [] }
+    { testFiles: [], files: [] },
   )
 
   const needingTests = fileBuckets.files.filter((file) => {

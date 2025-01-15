@@ -37,7 +37,7 @@ const messageParts: MessageParts = {
 
 function createLintMessage(
   lints: Array<LintError>,
-  type: 'errors' | 'warnings'
+  type: 'errors' | 'warnings',
 ): string {
   if (lints.length === 0) {
     return ''

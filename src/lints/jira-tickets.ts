@@ -2,7 +2,7 @@ import { LintError, Context, LintErrorType } from '../types'
 
 export async function test(
   context: Context,
-  level: LintErrorType
+  level: LintErrorType,
 ): Promise<LintError> {
   const { body } = context.pull_request
 

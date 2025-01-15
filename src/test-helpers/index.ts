@@ -378,8 +378,7 @@ export function getContext() {
             disabled: false,
             downloads_url:
               'https://api.github.com/repos/ansble/threepio/downloads',
-            events_url:
-              'https://api.github.com/repos/ansble/threepio/events',
+            events_url: 'https://api.github.com/repos/ansble/threepio/events',
             fork: false,
             forks: 0,
             forks_count: 0,
@@ -416,8 +415,7 @@ export function getContext() {
             languages_url:
               'https://api.github.com/repos/ansble/threepio/languages',
             license: null,
-            merges_url:
-              'https://api.github.com/repos/ansble/threepio/merges',
+            merges_url: 'https://api.github.com/repos/ansble/threepio/merges',
             milestones_url:
               'https://api.github.com/repos/ansble/threepio/milestones{/number}',
             mirror_url: null,
@@ -564,8 +562,7 @@ export function getContext() {
             disabled: false,
             downloads_url:
               'https://api.github.com/repos/ansble/threepio/downloads',
-            events_url:
-              'https://api.github.com/repos/ansble/threepio/events',
+            events_url: 'https://api.github.com/repos/ansble/threepio/events',
             fork: false,
             forks: 0,
             forks_count: 0,
@@ -602,8 +599,7 @@ export function getContext() {
             languages_url:
               'https://api.github.com/repos/ansble/threepio/languages',
             license: null,
-            merges_url:
-              'https://api.github.com/repos/ansble/threepio/merges',
+            merges_url: 'https://api.github.com/repos/ansble/threepio/merges',
             milestones_url:
               'https://api.github.com/repos/ansble/threepio/milestones{/number}',
             mirror_url: null,
@@ -800,8 +796,7 @@ export function getContext() {
           'https://api.github.com/repos/ansble/threepio/deployments',
         description: 'API built with Node.js used for the back-end of Solflow',
         disabled: false,
-        downloads_url:
-          'https://api.github.com/repos/ansble/threepio/downloads',
+        downloads_url: 'https://api.github.com/repos/ansble/threepio/downloads',
         events_url: 'https://api.github.com/repos/ansble/threepio/events',
         fork: false,
         forks: 0,
@@ -831,13 +826,11 @@ export function getContext() {
           'https://api.github.com/repos/ansble/threepio/issues/events{/number}',
         issues_url:
           'https://api.github.com/repos/ansble/threepio/issues{/number}',
-        keys_url:
-          'https://api.github.com/repos/ansble/threepio/keys{/key_id}',
+        keys_url: 'https://api.github.com/repos/ansble/threepio/keys{/key_id}',
         labels_url:
           'https://api.github.com/repos/ansble/threepio/labels{/name}',
         language: 'JavaScript',
-        languages_url:
-          'https://api.github.com/repos/ansble/threepio/languages',
+        languages_url: 'https://api.github.com/repos/ansble/threepio/languages',
         license: null,
         merges_url: 'https://api.github.com/repos/ansble/threepio/merges',
         milestones_url:

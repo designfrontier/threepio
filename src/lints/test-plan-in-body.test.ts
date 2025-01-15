@@ -13,7 +13,7 @@ describe('#testPlanCheck', () => {
 
     expect(type).toBe('error')
     expect(message).toBe(
-      '[No Test Plan found in PR body](https://github.com/designfrontier/threepio/blob/main/docs/rules.md#test-plan-in-body)'
+      '[No Test Plan found in PR body](https://github.com/designfrontier/threepio/blob/main/docs/rules.md#test-plan-in-body)',
     )
   })
 

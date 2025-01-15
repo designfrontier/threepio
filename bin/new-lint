@@ -37,7 +37,7 @@ const insertLineInFile = (filename, marker, lineToInsert) => {
       ...fileArr.slice(0, fileLineIndex),
       lineToInsert,
       ...fileArr.slice(fileLineIndex),
-    ].join('\n')
+    ].join('\n'),
   )
 }
 
@@ -96,7 +96,7 @@ ${desc}`
     'docs/rules.md',
     `${rules}
 
-  ${docTemplate}`
+  ${docTemplate}`,
   )
 
   // add to the index file
@@ -118,14 +118,14 @@ ${desc}`
   insertLineInFile(
     'src/config.ts',
     'changeSizeCheck',
-    `      ${varName}: '${level}',`
+    `      ${varName}: '${level}',`,
   )
 
   // add to config test file
   insertLineInFile(
     'src/config.test.ts',
     'changeSizeCheck',
-    `  ${varName}: '${level}',`
+    `  ${varName}: '${level}',`,
   )
 
   // add to readme file

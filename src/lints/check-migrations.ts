@@ -2,12 +2,12 @@ import { LintError, LintErrorType, Context, File } from '../types'
 
 export async function test(
   context: Context,
-  level: LintErrorType
+  level: LintErrorType,
 ): Promise<LintError> {
   const { files } = context
 
   const migrationFiles = files.filter((file) =>
-    file.filename.endsWith('migration.sql')
+    file.filename.endsWith('migration.sql'),
   )
   let message = ''
 
@@ -23,7 +23,7 @@ export async function test(
 
   if (droppedColumns.length > 0) {
     message += `⚠️ The following columns were dropped from the database: ${droppedColumns.join(
-      ', '
+      ', ',
     )}.
 
 This has the potential of causing an outage during a deploy. Please ensure you take the following steps before merging this pull request:
@@ -60,7 +60,7 @@ For more information about why this can cause an outage and more information on 
 
   if (changedTypeColumns.length > 0) {
     message += `⚠️ The types of the following columns were changed: ${changedTypeColumns.join(
-      ', '
+      ', ',
     )}.
 
 This has the potential of causing issues. To avoid this, please consider:
@@ -87,7 +87,7 @@ For more information about why this can cause an outage and more information on 
 
   if (addedIndexes.length > 0) {
     message += `⚠️ The following indexes were not added with CONCURRENTLY: ${addedIndexes.join(
-      ', '
+      ', ',
     )}.
 This can cause performance issues during the creation of the index. Please add the \`CONCURRENTLY\` statement in the migration file like:
 \`\`\`

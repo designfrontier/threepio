@@ -9,7 +9,7 @@ const lints: {
   [key: string]: (
     context: Context,
     level: LintErrorType,
-    config: RuleConfig
+    config: RuleConfig,
   ) => Promise<LintError>
 } = {
   jiraTickets,
@@ -31,7 +31,7 @@ type lintStackItem =
       test: (
         context: Context,
         level: LintErrorType,
-        config: { [key: string]: any }
+        config: { [key: string]: any },
       ) => Promise<LintError>
       level: LintErrorType
       config: { [key: string]: RuleConfig }
@@ -42,7 +42,7 @@ type Levels = keyof typeof levels
 
 export default async function (
   context: Context,
-  conf: Config
+  conf: Config,
 ): Promise<{
   warning: Array<LintError>
   error: Array<LintError>
@@ -70,7 +70,7 @@ export default async function (
           message: '',
         }
       )
-    })
+    }),
   )
 
   const lintResult = linted.reduce(
@@ -80,12 +80,12 @@ export default async function (
         error: Array<LintError>
         none: Array<LintError>
       },
-      l
+      l,
     ) => {
       a[l.type].push(l)
       return a
     },
-    { warning: [], error: [], none: [] }
+    { warning: [], error: [], none: [] },
   )
 
   return lintResult

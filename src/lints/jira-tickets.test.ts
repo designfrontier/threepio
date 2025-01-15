@@ -13,7 +13,7 @@ describe('#jiraTickets', () => {
 
     expect(type).toBe('error')
     expect(message).toBe(
-      '[No JIRA ticket found in PR body](https://github.com/designfrontier/threepio/blob/main/docs/rules.md#jira-ticket)'
+      '[No JIRA ticket found in PR body](https://github.com/designfrontier/threepio/blob/main/docs/rules.md#jira-ticket)',
     )
   })
 

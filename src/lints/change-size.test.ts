@@ -20,7 +20,7 @@ describe('#changeSize', () => {
           additions: 100,
           deletions: 1005,
           changes: 1100,
-        })
+        }),
       ),
       pull_request: generateStubPullRequest({
         additions: 500,
@@ -47,7 +47,7 @@ describe('#changeSize', () => {
           additions: 10000,
           deletions: 5000,
           changes: 15000,
-        })
+        }),
       ),
       pull_request: generateStubPullRequest({
         additions: 10000,

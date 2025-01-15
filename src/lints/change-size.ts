@@ -5,7 +5,7 @@ const FILE_CUTOFF = 10
 
 export async function test(
   context: Context,
-  level: LintErrorType
+  level: LintErrorType,
 ): Promise<LintError> {
   const { files, pull_request: pullRequest } = context
   const { additions, deletions, changed_files: changedFiles } = pullRequest
@@ -19,7 +19,7 @@ export async function test(
 
       return a
     },
-    { additions: 0, deletions: 0 }
+    { additions: 0, deletions: 0 },
   )
 
   // we exclude package-lock.json changes since they are generated
