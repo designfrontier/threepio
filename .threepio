@@ -3,3 +3,6 @@ rules:
     exclude:
       - src/types.ts
       - src/test-helpers/index.ts
+  jiraTickets:
+    prefix:
+      - FAKE

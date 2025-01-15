@@ -77,7 +77,7 @@ describe('#review', () => {
           rest: restStub,
         },
       ),
-    ).toBe(true)
+    ).toBe(false)
 
     expect(restStub.pulls.listFiles).toHaveBeenCalledTimes(1)
   })
@@ -121,7 +121,7 @@ describe('#review', () => {
           rest: restStub,
         },
       ),
-    ).toBe(true)
+    ).toBe(false)
 
     expect(restStub.issues.listComments).toHaveBeenCalledTimes(1)
     expect(restStub.issues.updateComment).toHaveBeenCalledTimes(1)
@@ -167,7 +167,7 @@ describe('#review', () => {
           rest: restStub,
         },
       ),
-    ).toBe(true)
+    ).toBe(false)
 
     expect(restStub.issues.listComments).toHaveBeenCalledTimes(1)
     expect(restStub.issues.updateComment).toHaveBeenCalledTimes(0)
@@ -187,10 +187,32 @@ describe('#parse', () => {
         ...context.payload,
       }),
     ).toStrictEqual({
-      errors: [],
-      failed: false,
-      message: '',
-      shouldComment: false,
+      errors: [
+        {
+          message:
+            '[No JIRA ticket found in PR body](https://github.com/designfrontier/threepio/blob/main/docs/rules.md#jira-ticket)',
+          type: 'error',
+        },
+      ],
+      failed: true,
+      message: `<details>
+  <summary><h3>Reminders of how to do a good code review</h3></summary>
+
+  1. Read through the ticket so you know what should be accomplished
+  2. Read through the code and make sure you understand what it should be doing
+  3. Checkout the code locally and get it running
+  4. Run through the use cases in the ticket / test plan to make sure they work
+  5. Leave comments and questions
+  6. Decide to approve, or request changes
+</details>
+
+
+### Errors That Need Correction Before Merging
+
+- [No JIRA ticket found in PR body](https://github.com/designfrontier/threepio/blob/main/docs/rules.md#jira-ticket)
+
+`,
+      shouldComment: true,
     })
   })
 })

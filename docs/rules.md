@@ -26,8 +26,16 @@ Surrounding it in square brackets creates a hyperlink to the JIRA ticket.
 
 Currently supported JIRA projects are:
 
-- DOOM
 - PLAT
+
+To add more you can specify them in the rules section of the `.threepio` file like this:
+
+```
+rules:
+  jiraTickets:
+      prefix:
+        - fake
+```
 
 ### test plan in body
 

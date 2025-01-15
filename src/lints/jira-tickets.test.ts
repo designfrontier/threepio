@@ -9,7 +9,7 @@ describe('#jiraTickets', () => {
       }),
     })
 
-    const { type, message } = await jiraTickets(fakeContext, 'error')
+    const { type, message } = await jiraTickets(fakeContext, 'error', {})
 
     expect(type).toBe('error')
     expect(message).toBe(
@@ -20,11 +20,13 @@ describe('#jiraTickets', () => {
   test('returns no error if ticket ID', async () => {
     const fakeContext = generateStubContext({
       pull_request: generateStubPullRequest({
-        body: 'this is a test with a SOLFLOW-1234 ticket id in it',
+        body: 'this is a test with a FAKE-1234 ticket id in it',
       }),
     })
 
-    const { type } = await jiraTickets(fakeContext, 'warning')
+    const { type } = await jiraTickets(fakeContext, 'warning', {
+      prefix: ['FAKE'],
+    })
 
     expect(type).toBe('none')
   })

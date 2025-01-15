@@ -1,16 +1,19 @@
-import { LintError, Context, LintErrorType } from '../types'
+import { LintError, Context, LintErrorType, RuleConfig } from '../types'
 
 export async function test(
   context: Context,
   level: LintErrorType,
+  config: RuleConfig,
 ): Promise<LintError> {
   const { body } = context.pull_request
+  const prefixes = config?.prefix ? [...config.prefix, 'DOOM'] : ['DOOM']
+  const rgxp = new RegExp(`(${prefixes.join('|')})-\\d+`, 'gi')
 
   // check that a ticket is mentioned
   // if mentioned all good
   // if not, return an error
 
-  return !/(solflow|plat|doom|hxapi)-\d+/gi.test(body)
+  return !rgxp.test(body)
     ? {
         type: level,
         message:
