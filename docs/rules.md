@@ -112,3 +112,45 @@ default level: `warn`
 Checks to make sure that you aren't making any changes to the database schema
 that might result in unexpected failures. More information about common
 migration problems can be found [here](./database.md).
+
+You can change the files that are matched in one of two ways:
+
+1. by configuring the ending string you want it to look for
+2. by changing the directory you want it to look in
+
+For example:
+
+```
+rules:
+  checkMigrations:
+      ending: '.sql'
+```
+
+will match all files that end in `.sql` that are part of the PR.
+That may be what you want, but it also might not. The default
+ending it matches on is `migration.sql`.
+
+The example for number 2 look like this:
+
+```
+rules:
+  checkMigrations:
+      dir: 'db/migrations'
+```
+
+This will match any file in `db/migrations` and run the check against them.
+You could also use both like this:
+
+```
+rules:
+  checkMigrations:
+      dir: 'db/migrations'
+      ending: '.sql'
+```
+
+The result here is that any file in `db/migrations` that ends in
+`.sql` will be matched and other files in that directory will be
+ignored.
+
+You MUST specify both if you want both behaviors. Specifying `dir`
+without `ending` will result in ending being ignored.

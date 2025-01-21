@@ -6,7 +6,7 @@ export async function test(
   config: RuleConfig,
 ): Promise<LintError> {
   const { body } = context.pull_request
-  const prefixes = config?.prefix ? [...config.prefix, 'DOOM'] : ['DOOM']
+  const prefixes = config?.prefix ? [...config.prefix, 'PLAT'] : ['PLAT']
   const rgxp = new RegExp(`(${prefixes.join('|')})-\\d+`, 'gi')
 
   // check that a ticket is mentioned
