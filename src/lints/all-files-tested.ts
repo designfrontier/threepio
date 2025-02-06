@@ -3,6 +3,7 @@ import { LintError, LintErrorType, Context, File, RuleConfig } from '../types'
 const EXCLUDE_EXTENSION = [
   'php',
   'yml',
+  'xml',
   'yaml',
   'md',
   'json',
@@ -12,6 +13,13 @@ const EXCLUDE_EXTENSION = [
   'npmrc',
   'scss',
   'css',
+  'nvmrc',
+  'tool-versions',
+  'editorconfig',
+  'threepio',
+  'dockerfile',
+  'prettierrc',
+  'prettierignore',
 ]
 
 const EXCLUDE_SUB_EXTENSIONS = ['d', 'config']
