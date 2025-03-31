@@ -108,4 +108,16 @@ describe('#allFilesTested', () => {
     })
     expect(type).toBe('none')
   })
+
+  test('returns no warning for deleted files', async () => {
+    const fakeContext = generateStubContext({
+      files: ['deleted.ts'].map((f) =>
+        generateFile({ filename: f, status: 'removed' }),
+      ),
+    })
+    const { type } = await allFilesTested(fakeContext, 'warning', {
+      exclude: ['./src/types.ts'],
+    })
+    expect(type).toBe('none')
+  })
 })

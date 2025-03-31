@@ -35,7 +35,7 @@ export async function test(
   // if a corresponding test file exists good
   // if not, return an error
 
-  const fileBuckets = files.reduce(
+  const fileBuckets = files.filter((file) => file.status !== 'removed').reduce(
     (a: { testFiles: Array<string>; files: Array<string> }, file: File) => {
       const { filename } = file
 

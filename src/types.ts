@@ -64,7 +64,7 @@ export type Octokit = {
 export type File = {
   sha: string
   filename: string
-  status: string
+  status: "added" | "removed" | "modified" | "renamed" | "copied" | "changed" | "unchanged"
   additions: number
   deletions: number
   changes: number

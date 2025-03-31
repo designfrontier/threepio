@@ -34,6 +34,14 @@ export function generateFile(args: {
   additions?: number
   deletions?: number
   changes?: number
+  status?:
+    | 'added'
+    | 'removed'
+    | 'modified'
+    | 'renamed'
+    | 'copied'
+    | 'changed'
+    | 'unchanged'
 }): File {
   return {
     filename: 'fileName.ts',
