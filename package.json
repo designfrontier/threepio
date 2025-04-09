@@ -2,7 +2,7 @@
   "name": "@ansble/threepio",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "I make code review easier for humans",
   "publishConfig": {
     "access": "public"
