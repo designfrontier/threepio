@@ -55,6 +55,7 @@
     "*.{js,ts}": "npm run lint"
   },
   "dependencies": {
+    "glob-to-regexp": "^0.4.1",
     "yaml": "^2.7.0"
   }
 }
