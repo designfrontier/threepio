@@ -8,6 +8,8 @@ import lints from './lints'
 import { Context, LintError, FullContext, Octokit, User, Config } from './types'
 import { config } from './config'
 
+const MARKER = '<!-- threepio -->'
+
 export function shouldMessage(
   lints: { error: Array<LintError>; warning: Array<LintError> },
   action: string,
@@ -59,10 +61,14 @@ export async function review(context: FullContext, github: Octokit) {
   })
 
   const threepioComment = comments.data
-    .filter((c: { user: User }) => {
-      return c.user.id === 41898282 && c.user.login === 'github-actions[bot]'
+    .filter((c: { user: User; body?: string }) => {
+      return (
+        c.user.id === 41898282 &&
+        c.user.login === 'github-actions[bot]' &&
+        c.body?.includes(MARKER)
+      )
     })
-    .pop() // need to get something more specific to threepio?
+    .pop()
 
   if (threepioComment) {
     console.log('updating:')
@@ -73,7 +79,7 @@ export async function review(context: FullContext, github: Octokit) {
       comment_id: threepioComment.id,
       owner: repo.owner.login,
       repo: repo.name,
-      body: result.shouldComment ? result.message : looksGood(), // TODO: is this right? All clear whenever should comment is false?
+      body: `${MARKER}\n${result.shouldComment ? result.message : looksGood()}`,
     })
   } else if (result.shouldComment) {
     console.log('messaging:')
@@ -83,7 +89,7 @@ export async function review(context: FullContext, github: Octokit) {
       issue_number: issueNumber,
       owner: repo.owner.login,
       repo: repo.name,
-      body: result.message,
+      body: `${MARKER}\n${result.message}`,
     })
   }
 
