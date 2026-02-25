@@ -44,7 +44,7 @@ export type Octokit = {
         owner: string
         repo: string
         issue_number: number
-      }) => Promise<{ data: Array<{ id: number; user: User }> }>
+      }) => Promise<{ data: Array<{ id: number; user: User; body?: string }> }>
       createComment: (a: {
         owner: string
         repo: string

@@ -55,6 +55,7 @@ describe('#review', () => {
             data: [
               {
                 id: 1,
+                body: '<!-- threepio -->\nprevious comment',
                 user: generateUserStub({
                   id: 41898282,
                   login: 'github-actions[bot]',
@@ -99,6 +100,7 @@ describe('#review', () => {
             data: [
               {
                 id: 1,
+                body: '<!-- threepio -->\nprevious comment',
                 user: generateUserStub({
                   id: 41898282,
                   login: 'github-actions[bot]',
@@ -148,6 +150,53 @@ describe('#review', () => {
                 user: generateUserStub({
                   id: 123,
                   login: 'Frank',
+                }),
+              },
+            ],
+          }
+        }),
+        createComment: jest.fn(),
+        updateComment: jest.fn(),
+      },
+    }
+
+    expect(
+      await review(
+        {
+          payload: getContext().payload,
+        },
+        {
+          rest: restStub,
+        },
+      ),
+    ).toBe(false)
+
+    expect(restStub.issues.listComments).toHaveBeenCalledTimes(1)
+    expect(restStub.issues.updateComment).toHaveBeenCalledTimes(0)
+    expect(restStub.issues.createComment).toHaveBeenCalledTimes(1)
+  })
+
+  test('if bot comment exists without marker it should create a new comment', async () => {
+    const restStub = {
+      pulls: {
+        listFiles: jest.fn(async () => {
+          return {
+            data: ['test.js', 'index.ts', 'index.test.ts'].map((f) =>
+              generateFile({ filename: f }),
+            ),
+          }
+        }),
+      },
+      issues: {
+        listComments: jest.fn(async () => {
+          return {
+            data: [
+              {
+                id: 1,
+                body: 'some other bot comment without marker',
+                user: generateUserStub({
+                  id: 41898282,
+                  login: 'github-actions[bot]',
                 }),
               },
             ],
