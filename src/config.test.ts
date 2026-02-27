@@ -19,7 +19,6 @@ describe('#config', () => {
 
     expect(config()).toStrictEqual({
       tests: exampleTests,
-      jira: { projects: ['DOOM', 'PLAT'] },
     })
 
     restoreConfigFile()
@@ -29,26 +28,32 @@ describe('#config', () => {
     generateConfigFile(`tests:
   jiraTickets: warn
 
-jira:
-  projects:
-    - FLIGHT`)
+rules:
+  jiraTickets:
+    prefix:
+      - FLIGHT`)
 
     expect(config()).toStrictEqual({
       tests: { jiraTickets: 'warn' },
-      jira: { projects: ['FLIGHT'] },
+      rules: {
+        jiraTickets: { prefix: ['FLIGHT'] },
+      },
     })
 
     restoreConfigFile()
   })
 
   test('should override partial base with .threepio file contents', () => {
-    generateConfigFile(`jira:
-  projects:
-    - FLIGHT`)
+    generateConfigFile(`rules:
+  jiraTickets:
+    prefix:
+      - FLIGHT`)
 
     expect(config()).toStrictEqual({
       tests: exampleTests,
-      jira: { projects: ['FLIGHT'] },
+      rules: {
+        jiraTickets: { prefix: ['FLIGHT'] },
+      },
     })
 
     restoreConfigFile()

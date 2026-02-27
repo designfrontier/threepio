@@ -24,7 +24,7 @@ describe('#checkMigrations', () => {
       ],
     })
 
-    const { type, message } = await checkMigrations(fakeContext, 'error')
+    const { type, message } = await checkMigrations(fakeContext, 'error', {})
 
     expect(type).toBe('error')
     expect(message).toContain('dropped')
@@ -54,7 +54,7 @@ describe('#checkMigrations', () => {
       ],
     })
 
-    const { type, message } = await checkMigrations(fakeContext, 'error')
+    const { type, message } = await checkMigrations(fakeContext, 'error', {})
 
     expect(type).toBe('error')
     expect(message).toContain('types')
@@ -84,7 +84,7 @@ describe('#checkMigrations', () => {
       ],
     })
 
-    const { type, message } = await checkMigrations(fakeContext, 'error')
+    const { type, message } = await checkMigrations(fakeContext, 'error', {})
 
     expect(type).toBe('error')
     expect(message).toContain('types')
@@ -114,7 +114,7 @@ describe('#checkMigrations', () => {
       ],
     })
 
-    const { type, message } = await checkMigrations(fakeContext, 'error')
+    const { type, message } = await checkMigrations(fakeContext, 'error', {})
 
     expect(type).toBe('error')
     expect(message).toContain('CONCURRENTLY')

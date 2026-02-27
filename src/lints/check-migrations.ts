@@ -1,14 +1,25 @@
-import { LintError, LintErrorType, Context, File } from '../types'
+import { LintError, LintErrorType, Context, RuleConfig } from '../types'
 
 export async function test(
   context: Context,
   level: LintErrorType,
+  config: RuleConfig,
 ): Promise<LintError> {
   const { files } = context
+  const DEFAULT_ENDING = 'migration.sql'
 
-  const migrationFiles = files.filter((file) =>
-    file.filename.endsWith('migration.sql'),
-  )
+  const migrationFiles = files.filter((file) => {
+    if (config?.dir && config?.ending) {
+      return (
+        file.filename.startsWith(config?.dir) &&
+        file.filename.endsWith(config?.ending)
+      )
+    } else if (config?.dir) {
+      return file.filename.startsWith(config?.dir)
+    }
+
+    return file.filename.endsWith(config?.ending ?? DEFAULT_ENDING)
+  })
   let message = ''
 
   const dropColumnRegex =
@@ -31,7 +42,7 @@ This has the potential of causing an outage during a deploy. Please ensure you t
 2. Merge and deploy the above PR.
 3. Merge and deploy this PR.
 
-For more information about why this can cause an outage and more information on how to avoid it, please see: <https://lumiohx.atlassian.net/wiki/spaces/SE/pages/1105592325/Common+Prisma+Migration+Issues#Dropping-a-column>
+For more information about why this can cause an outage and more information on how to avoid it, please see: <https://github.com/designfrontier/threepio/blob/main/docs/database.md#Dropping-a-column>
 `
   }
 
@@ -72,7 +83,7 @@ This has the potential of causing issues. To avoid this, please consider:
 4. Submit a PR, merge and deploy it.
 5. Go through the Dropping a column section to remove the old column.
 
-For more information about why this can cause an outage and more information on how to avoid it, please see: <https://lumiohx.atlassian.net/wiki/spaces/SE/pages/1105592325/Common+Prisma+Migration+Issues#Altering-a-column%E2%80%99s-type>`
+For more information about why this can cause an outage and more information on how to avoid it, please see: <https://github.com/designfrontier/threepio/blob/main/docs/database.md#altering-a-columns-type>`
   }
 
   const addedIndexes = []
@@ -94,7 +105,7 @@ This can cause performance issues during the creation of the index. Please add t
 CREATE INDEX CONCURRENTLY "index_name" ...
 \`\`\`
 
-For more information about why this can cause performance issues and how to avoid it, please see: <https://lumiohx.atlassian.net/wiki/spaces/SE/pages/1105592325/Common+Prisma+Migration+Issues#Adding-an-index-to-a-column>
+For more information about why this can cause performance issues and how to avoid it, please see: <https://github.com/designfrontier/threepio/blob/main/docs/database.md#adding-an-index-to-a-column>
 `
   }
 
