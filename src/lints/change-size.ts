@@ -1,4 +1,5 @@
-import { LintError, LintErrorType, Context, File } from '../types'
+import { LintError, LintErrorType, Context, File, RuleConfig } from '../types'
+const globToRegExp = require('glob-to-regexp')
 
 const LINE_CUTOFF = 500
 const FILE_CUTOFF = 10
@@ -6,6 +7,7 @@ const FILE_CUTOFF = 10
 export async function test(
   context: Context,
   level: LintErrorType,
+  config: RuleConfig
 ): Promise<LintError> {
   const { files, pull_request: pullRequest } = context
   const { additions, deletions, changed_files: changedFiles } = pullRequest
@@ -22,9 +24,33 @@ export async function test(
     { additions: 0, deletions: 0 },
   )
 
+  const ignoredChanges = files.reduce(
+    (a, f: File) => {
+      [...(config?.ignoredGlobs ?? [])].some(ignoredGlob => {
+        if (f.filename.match(globToRegExp(ignoredGlob))) {
+          a.additions += f.additions
+          a.deletions += f.deletions
+          return true
+        }
+      })
+      return a
+    },
+    { additions: 0, deletions: 0}
+  )
+
+  const irrelevantChanges = [packageChanges, ignoredChanges].reduce(
+    (a, changes: {additions: number, deletions: number}) => (
+      {
+        additions: changes.additions + a.additions,
+        deletions: changes.deletions + a.deletions
+      }
+    ),
+    { additions: 0, deletions: 0}
+  )
+
   // we exclude package-lock.json changes since they are generated
-  return additions - packageChanges.additions >= LINE_CUTOFF ||
-    deletions - packageChanges.deletions >= LINE_CUTOFF ||
+  return additions - irrelevantChanges.additions >= LINE_CUTOFF ||
+    deletions - irrelevantChanges.deletions >= LINE_CUTOFF ||
     changedFiles >= FILE_CUTOFF
     ? {
         type: level,
