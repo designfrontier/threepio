@@ -13,7 +13,6 @@ export function config(): Config {
       checkMigrations: 'warn',
       changeSizeCheck: 'warn',
     },
-    jira: { projects: ['DOOM', 'PLAT'] },
   }
 
   return { ...base, ...conf }
