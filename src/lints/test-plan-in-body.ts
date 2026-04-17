@@ -6,13 +6,26 @@ export async function test(
 ): Promise<LintError> {
   const { body } = context.pull_request
 
-  // check that we have a test plan
+  const noTestPlan: LintError = {
+    type: level,
+    message:
+      '[No Test Plan found in PR body](https://github.com/designfrontier/threepio/blob/main/docs/rules.md#test-plan-in-body)',
+  }
 
-  return !/test plan[:\s]*[\n][\n]?([ ]?[-*\d])/gi.test(body)
-    ? {
-        type: level,
-        message:
-          '[No Test Plan found in PR body](https://github.com/designfrontier/threepio/blob/main/docs/rules.md#test-plan-in-body)',
-      }
-    : { type: 'none', message: '' }
+  const headerMatch = /test plan[^\n]*\n/gi.exec(body)
+  if (!headerMatch) return noTestPlan
+
+  const afterHeader = body.slice(headerMatch.index + headerMatch[0].length)
+
+  const hasMeaningfulContent = afterHeader.split('\n').some((line) => {
+    const t = line.trim()
+    return (
+      t.length > 0 &&
+      !/^[-*]\s*\[\s*\]\s*list of testing instructions\s*$/i.test(t) &&
+      !/^[-*]\s*$/.test(t) &&
+      !/^todo\b/i.test(t)
+    )
+  })
+
+  return hasMeaningfulContent ? { type: 'none', message: '' } : noTestPlan
 }
