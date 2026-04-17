@@ -59,4 +59,101 @@ describe('#testPlanCheck', () => {
     const { type } = await testPlanCheck(fakeContext, 'error')
     expect(type).toBe('none')
   })
+
+  test('returns no error if test plan is free-form text', async () => {
+    const fakeContext = generateStubContext({
+      pull_request: generateStubPullRequest({
+        body: 'this is a test with a\n Test Plan:\n Manually verified the happy path in staging.',
+      }),
+    })
+
+    const { type } = await testPlanCheck(fakeContext, 'error')
+    expect(type).toBe('none')
+  })
+
+  test('returns no error if test plan has unchecked checkboxes with real content', async () => {
+    const fakeContext = generateStubContext({
+      pull_request: generateStubPullRequest({
+        body: 'Test Plan:\n - [ ] Verify the login flow works\n - [ ] Check edge cases',
+      }),
+    })
+
+    const { type } = await testPlanCheck(fakeContext, 'error')
+    expect(type).toBe('none')
+  })
+
+  test('returns an error if test plan section is blank', async () => {
+    const fakeContext = generateStubContext({
+      pull_request: generateStubPullRequest({
+        body: 'this is a test with a\n Test Plan:\n\n',
+      }),
+    })
+
+    const { type, message } = await testPlanCheck(fakeContext, 'error')
+    expect(type).toBe('error')
+    expect(message).toBe(
+      '[No Test Plan found in PR body](https://github.com/designfrontier/threepio/blob/main/docs/rules.md#test-plan-in-body)',
+    )
+  })
+
+  test('returns an error if test plan is the default template placeholder', async () => {
+    const fakeContext = generateStubContext({
+      pull_request: generateStubPullRequest({
+        body: 'Test Plan:\n - [ ] List of testing instructions',
+      }),
+    })
+
+    const { type, message } = await testPlanCheck(fakeContext, 'error')
+    expect(type).toBe('error')
+    expect(message).toBe(
+      '[No Test Plan found in PR body](https://github.com/designfrontier/threepio/blob/main/docs/rules.md#test-plan-in-body)',
+    )
+  })
+
+  test('returns an error if test plan only has TODOs', async () => {
+    const fakeContext = generateStubContext({
+      pull_request: generateStubPullRequest({
+        body: 'Test Plan:\n TODO: fill this in',
+      }),
+    })
+
+    const { type, message } = await testPlanCheck(fakeContext, 'error')
+    expect(type).toBe('error')
+    expect(message).toBe(
+      '[No Test Plan found in PR body](https://github.com/designfrontier/threepio/blob/main/docs/rules.md#test-plan-in-body)',
+    )
+  })
+
+  test('returns no error if test plan has bullets with text', async () => {
+    const fakeContext = generateStubContext({
+      pull_request: generateStubPullRequest({
+        body: 'Test Plan:\n - verify the feature works\n - check edge cases',
+      }),
+    })
+
+    const { type } = await testPlanCheck(fakeContext, 'error')
+    expect(type).toBe('none')
+  })
+
+  test('returns an error if test plan only has empty bullets', async () => {
+    const fakeContext = generateStubContext({
+      pull_request: generateStubPullRequest({
+        body: 'Test Plan:\n -\n -\n *',
+      }),
+    })
+
+    const { type } = await testPlanCheck(fakeContext, 'error')
+    expect(type).toBe('error')
+  })
+
+  test('returns an error if test plan only has TODOs regardless of casing', async () => {
+    const fakeContext = generateStubContext({
+      pull_request: generateStubPullRequest({
+        body: 'Test Plan:\n todo: fill this in',
+      }),
+    })
+
+    const { type } = await testPlanCheck(fakeContext, 'error')
+    expect(type).toBe('error')
+  })
 })
